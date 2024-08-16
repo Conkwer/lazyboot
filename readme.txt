@@ -114,7 +114,4 @@ Tools that are used:
 
 "sfk" and "busybox" are used for convenience. 
 
-"logoinsert", "lbacalc", "isofix", "IP.BIN 4 Win", "BinPATCH" and other tools and custom fixes. 
-
-
-2024.05.13
+"logoinsert", "lbacalc", "isofix", "IP.BIN 4 Win", "BinPATCH" and other tools and custom fixes.
