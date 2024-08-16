@@ -1,0 +1,3 @@
+@echo off
+cd ".\system\emu\"
+start "" ePSXe.exe

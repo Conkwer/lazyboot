@@ -1,0 +1,19 @@
+{
+  "automatic": "off",
+  "sortfile": "sortfile.str",
+  "logo": "off",
+  "alert": "off",
+  "imagename": "DREAMISO",
+  "badname": "EMPTY",
+  "mainbinary": "1ST_READ.BIN",
+  "scramble": "on",
+  "binhack": "on",
+  "datalabel": "DREAMISO",
+  "lbavalue": "11702",
+  "cdda": "off",
+  "dcsystem": "katana",
+  "namelist": "on",
+  "inducer": "on",
+  "isonamechk": "on",
+  "doomer": "off"
+}

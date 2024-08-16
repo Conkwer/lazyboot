@@ -1,0 +1,18 @@
+Emulators Pack for the Dreamcast v20171109
+
+There are several folders, but all same princeples for all emulators.
+Put your roms in "ROMS" folder, and run the script (.CMD) and your get your working CDI image.
+Test it on latest Demul or real Dreamcast. Not in NullDC as most of them don't works on it. GypPlay woks good only on real hardware.
+
+ROMs supported:
+
+DreamSNES\ = SMC, not zipped. SFC and FIG can work.
+EMUGEN\ = BIN. You can put GENs (no problems noticed)
+GenPlusDC\ = ZIP. The files in ZIP can be BIN, GEN.
+GypPlay\ = almost any video format (put in MOVIES instead ROMS). For example: mp4, mkv, avi, flv (h264+aac); avi (DivX+mp3). Will encode all files in a supported format. Can take some time.
+NesterDC\ = NES, not zipped.
+SegaGen\ = BIN. You can put GENs (no problems noticed)
+SNES4ALL\ = ZIP, SMC
+
+
+2018, dc4you.ru

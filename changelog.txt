@@ -1,0 +1,387 @@
+Changelog:
+
+#20240524
+- a new tool, mkcdi.cmd (it also availible as standalone app: see .\extra_tools\lzlite).
+How it works: it the same as lazyboot.cmd but simpler (less reliable, tho) and do not asking questions. It use python app to buld a cdi as fast as possible. You need to run the app and it will gives you a cdi (~90% of games should works fine).
+It also use "hack4.exe" and "binhack" as lazyboot.cmd, and checks if IP.BIN is availble. 
+
+mkcdi.cmd can be used if you need something simple and fast. Since Lazyboot.cmd have a lot of error handling and presets that made it code hardly readable. mkcdi.cmd instead have the all nessesary logic but allows you to set it up to a specific game easily. Just tweak the script in Notepad++, if you need to change this:
+set lba=45000
+set binary=1ST_READ.BIN
+
+If you need even a more simpler tool, you can use .\extra_tools\mkcdi-*\mkcdi.exe. It's portable and you can specify where your data directory is and where to save a cdi:
+mkcdi.exe -i .\data -V dcgame -o mygame.cdi -l 45000
+But there are almost no error handling and you should provide a prober IP.BIN and 1ST_READ.BIN (from GDI).
+With combination with 7-zip it can be useful to create a custom patcher (user's gdi -> your translation patch -> user's cdi).
+
+- moved the source code (lazyboot.cpp, iso2cdi.py and mkcdi.py) and changed the icon color.
+Currently the only tool that is not open-source (or I can't find any source code for it) is 
+iso2cdi do not use "hack4" tho.
+lazyboot.cpp (lazyboot.exe) launcher it not important at the moment, it only pass command line arguments if you drag a CDI to unpack it to .\data. Also that exe is used to set a font size in cmd window (font.cfg). 
+
+lazyboot.cpp was compiled in GCC-13.2.0\mingw32 
+("e:\GCC-13.2.0\mingw32\bin\g++.exe" -static -g "$(FILE_NAME)" -o "$(NAME_PART).exe" -I "%CppIncludeDir0%" -L "%LibDir0%" -static-libgcc -lcomdlg32 -std=c++20 -lshlwapi -m32).
+
+Python scripts was compiled with Pyinstaller
+(pyinstaller --onefile --icon ".\icon.ico" "$(FILE_NAME)").
+ 
+tools\mkcdi.exe replicate cdi4dc behavior and command line arguments. Techincally, you can use mkcdi.exe in your apps instead of cdi4dc if need faster image generation, without ECC generation.
+It can trigger some shitty antivirus software, tho.
+
+#20240514
+- if you drag'n'drop CDI file to lazyboot.cmd (or lazyboot.exe) it will unpack the content of CDI to .\data directory. Special characters in paths are not supported. 7-Zip ZS is used with Iso7z plugin.
+- lot of errors handling. For example, if user tries to make CDI with audio without actually the audio, will be used mode without CDDA instead of lot of errors.
+- fixes for mkcdi.exe, now it will ignore dummy files (with "0.0" name).
+- removed ConEmu since it was slow
+- lazyboot.exe launcher now pass all arguments to lazyboot.cmd and run lazyboot.cmd and. Also it uses Consolas font with size 20 by default but user can specify font size in font.cfg. For example, for 4k screen can be used 30.
+- there are no much profit to use lazyboot.exe instead of lazyboot.cmd until you need to use drag'n'drop and specify the font size.
+- "hotkeys" for profiles. You can type "faster", "fast", "slower", "slow", "mastering".
+It mean that dummy and cdi4dc (with ecc and everything) will be enabled if you use mastering/slow/slower and mkcdi (no ecc) will be used with no dummy, audio+data mode for fast/faster
+- "EMULS/VIDEO (CDI, audio/data)" gimmicks back "by popular demand" but they are now optional and will be unpacked only if the user decides to use it (make a video CD or emulators compilation).
+
+#20240504
+- added standalone app, mkcdi.exe (like cdi4dc). Can be used from batch (see mkcdi.cmd). Syntax:
+mkcdi.exe -i .\data -V dcgame -o mygame.cdi -l 45000
+If no argument is provided and you run mkcdi.exe, then it will build an image with the name: dcgame-data.cdi from the .\data folder if it exists in the current directory.
+- dropped WinXP support, for real this time. Python 3.12.3 is used. Supported OS: Win7 (with latest updates),10,11. (smaller size and more portable)
+- "EMULS/VIDEO (CDI, audio/data)" and video disc creator functionality removed. (less gimmicks)
+- Intead of Python, CDI builder compiled to standalone mkcdi.exe (smaller size)
+
+#20210512
+-a new (incredibly fast) method of building CDI images based on the python script from 'botik'.
+-WinXP support is dropped since unsupported version of Python is used
+-quality of mpeg1 videos are improved (KVCD "Notch" Quantization Matrix) is used (smaller file size!!)
+-bugfixes and new bugs
+
+#20210510
+- bugfixes (some mistyping was fixed)
+- GDI functionality is restored (based on GDIBuilder https://projects.sappharad.com/tools/gdibuilder.html)
+To build a GDI you need to provide an original IP.BIN and 1ST_READ.BIN from GDI (or 45000LBA patched).
+You can find rebuilded GDI in gdi_image folder. It will be not a valid GDI, though (but compatible with emulators). Can be useful for translation projects (if you not want to modify 1ST_READ.BIN) and need to rebuild the image faster than CDI4DC is capable.
+
+#20201106
+- launcher improved. Less problems with false positive detection by antivirus software.
+- bugfix
+
+#201901290608
+- improvements in image naming (it's not forced you to use 8 letter anymore by default). You can use long names if find it useful.
+- other improvements
+
+#20190129
+- dummy creation is disabled for LBA >11702 to prevent image been oversized.
+Use default settings if dummy is needed. It will be turn off automatically if LBA greater then 11702.
+You can still put your own dummy if needed
+
+#20190128
+- Changed menu a bit. Now it's warns that you can enter an LBA here.
+"Enter "Y" (yes), "N" (no) or LBA VALUE (any number):"
+
+#20190127
+- You can enter LBA value when your asked for..
+"Do you want to use these values to "Binary", "Bootsector" and "LBA"?
+Enter "Y", if YES and "N", if NO:"
+If you enter any number here, instead of "Yes" or "No" it will be set as LBA value.
+45000, etc
+
+#20190126
+- LBA 45000 is now supported. All thanks go to YAGAMI55 (http://psxplanet.ru/forum) for finding a workaround.
+ MKISOFT images, created with LBA 45000 is not works in CDI4DC as expected. So, images with LBA >11702 will be fixed now with "ISO LBA fixer 1.3 - (C) 2001 by DeXT" and this working okay.
+
+#20190124
+-quick bugfix: temp files were not deleted after cdi is created
+-"Lazyboot_v3.4 launcher.cmd" is removed because it's the same as "Lazyboot_v3.4 launcher.exe". If you need pure CMD, you can use "Lazyboot_v3.4.cmd" instead.
+
+#20191101
+-fixed bugs with "emulator/movies creator" mode:
+1) An error "no files, stopping at copy" was shown (if mp4, mkv etc. detected) instead of creating the image with GypPlay. 
+2) Temporary files were not cleared after image creation
+-small fixes
+
+#20191031
+-added launcher (icon added and packed to "exe").
+Optional. Just to make it look better in explorer.
+No false detects from cheap antiviruses this time.
+
+#20181207
+-removed notification "Only for FAST MODE, of cause" when "IMAGE NAME"  changed in options. It usable for any mode
+-removed fast-mode-lazy.cmd and rename FAST MODE to AUTOMATIC (in all menus). 
+(Script still can be executed from Lazyboot\tools\automatic.bat if needed or this mode can be enabled in OPTIONS. Read readme about FAST MODE, what it does. In general, it is Lazyboot without image creation wizard and don't ask any questions. Can be useful if you need to test a particular game a lot and tired of pressing Enter)
+
+#20181124
+-small bugfixes:
+*Even if you will type "wince" in options it will not enable binhack and switch mode [fixed]
+*"kos" or "katana" commands only worked in options. Should work from main menu (where is "What type of selfboot image you need?" question)[fixed]
+*If you press "Enter" in "Options->Logo", the script closes unexpectedly [fixed]
+
+
+#201811150653
+-багфикс. dummy не создавался в режиме KOS (отключенным бинхаком), пофикшено.
+Теперь в хамбрю играх тоже можно создавать с dummy
+
+#201811150605
+-консоль закрывается сама и не висит в фоне, если запускать через "Lazyboot_v3.0 loader.cmd"
+-меню опций переделано и разделе "ALERT SOUND" можно не только выключить, но выбрать одну из шести предустановок
+
+
+#20181114-1250
+-исправлены ошибки в англ. Теперь более правильный.
+
+#20181114-1206
+-если лого отключено, то писало ошибку, что не найден логотип. Это не влияет на работу, но не должно было показываться.
+Пофикшено.
+
+#20181114-1005
+-создание dummy-файлов убрано из меню, теперь это включается в опциях или конфиге (17 строчка, dummy_off или dummy_on).
+Чтобы не делать для каждого типа пункт "с dummy" или "без dummy", то это можно включать или отключать через опции.
+Для SDISO и CDDA отключится само.
+Надеюсь, что ничего не сломал. Самая проверенная/stable версия теперь #20181113 (та что последняя, без поддержки сортлистов). Все что после этого не проверено временем.
+
+
+#20181114-0837
+-сборка образов в data/data работает без конвертера теперь.
+Сначала через MKISOFT создается образа с нулевым LBA, как для dreamshell, а потом cdi4dc с ключом -d создает из этого рабочий образ. Конвертер не нужен отдельно, он делает то же самое.
+Проверил на Record of Lodoss War, файлами из GDI и собрало DATA-DATA отлично. Кстати, там 1ST_READ.BIN назван 1NOSDC.BIN, надо переименовать в 1ST_READ.BIN или поменять в IP.BIN.
+А вот эмулятор с сеговскими ромами не собрало рабочим в DATA/DATA. Меню загружается, а эмуль потом не грузит. Похоже, надо бинарники его там искать и патчить отдельно, они под AUDIO/DATA LBA 17102 пропатчены.
+Так что, не везде у вас будет гладко с образами DATA/DATA, когда загрузочные файлы лежат не в корне диска, по крайней мере.
+
+Как быть с dummy? Не знаю, в этом режиме пока не создаётся. Наверное, стоило бы добавить в конфиг включение dummy или нет, а не в главное меню.
+
+
+#20181114
+-обновлены cygwin1.dll и mkisofs.exe до новых. Теперь опять работают сортлисты, см. мануал.
+Если что-то из-за этого сломалось, то нужно откатится к предыдущей сборке. Я не заметил каких-то проблем, но пока пусть считается, что beta т.к. не проверено должным образом. Это не значит, что забаговано. Вероятно, даже стабильнее, кто знает.
+
+
+#20181113
+
+-поддержка образов ISO для Dreamshell. Я не проверял, но должно работать.
+Настройки я взял со скрипта, который нашёл тут https://www.youtube.com/watch?v=sB_Huj5cZWI (дополненный Lazyboot).
+Если работало там, то будет работать и тут, проверить нечем. Теперь более органично вписано в основной скрипт.
+
+-полностью переделано создание файлов-пустышек (dummy). Раньше было очень коряво.
+Теперь без багов и этим можно пользоваться, размер определяет правильно и на полном авомате. Обратите внимание, что dummy будет спрятан в файловой системе (его не видно), он только сдвинет данные на нужный LBA.
+Раньше размер правильно определялся только когда данных больше 100Мб и всплывало навязчивое окно подтверждения лицензии. Эта наркоманская прога замененена на юниксовый Du и размер определяется теперь любой. Все автоматически, ничего вводить не нужно.
+Если вам нужно вдруг собрать образ нестандартного размера (не 700Мб) с файлом-пустышкой, то этого нет в опциях. Измените код сами. В файле tools\Lazyboot.cmd откройте блокнотом и найдите строчку set DISC_SIZE=712841213. Это размер диска в байтах. Поделите это число на 1024000 и получите в более понятных мегабайтах. Впишите новый размер (в байтах), который вам нужен и сохраните.
+
+-Поддержка образов CDI формата data/data. Реализовано через конвертер образов, а не "нативно" из данных в папке data. Подробнее см. мануал
+
+-Поддержка эмуляторов и видеодисков GypPlay (видео в подходящий формат конвертируется автоматически).
+Если скрипт детектит ромы или видео в папке ROMS, то запустится соответствующее меню с выбором софта.
+Ромлисты создаются автоматически. 
+Файл-пустышка (Dummy) не создается. Забивайте под завязку ромами, если потребуется. Ну или сами создавайте Dummy (до создания образа), если он вам нужен.
+
+-новое меню. Не только внешне, но и логика переписана. Теперь проверяется выбранный тип образа, а не введенная цифра и можно легко добавлять новые пункты или убирать их. Раньше проверялся введенный номер и изменив меню, можно было всё сломать, случайно изменив порядок. Теперь порядка нету, смотрит на переменные %cdi%, %mds_cdda%, %sdiso% и т.д. Но, не стоит забывать, что переменная %sb_tool% ещё есть.
+Сам код стал читабельнее, потому что не абстрактные цифры.
+
+-опять убрал из меню формат MDS/MDF. Вызывается как и раньше - можно написать mdf или mds в самом начале, где спрашивает 
+"What type of selfboot image you need?"
+
+-пофиксил корявую логику во многих местах и разные проверки, стало меньше ошибок и багов. Надеюсь, что их не осталось теперь вообще.
+
+-много мелких улучшений и исправлений. Например, логитип теперь по-умолчанию выключен (по популярному мнению). В меню пишет какого формата образ (например AUDIO/DATA), вместо абстрактного "бла бла, переходим к шагу2". Абстрактный номер шага вверху скрипта убран вообще, оно не несло полезной информации (сколько вообще шагов? Какой следующий шаг?).
+В самом меню убраны слова "без CDDA". Логично, что если есть пункт "с поддержкой CDDA", то остальные без таковой. Сам скрипт теперь можно запускать из папки tools, если это нужно (а не обязательно из "лончера"). И т.д.
+
+-исправлены многие ошибки в переводе на англ, местами было очень коряво и даже неправильно.
+
+
+(надеюсь, что это финальная версия на ближайшие несколько лет или даже вообще).
+ Хотя, хотелось бы доработать сборку в GDI; еще можно легко сделать "разборку" образа CDI, повзаимствав идею у DreamcastCdiTool. Но, оно ведь удобно и через GDIexplorer. Но, можно было бы.. чтобы когда положил CDI в папку data, то его детектило и автоматически распаковывало. То же самое можно сделать и для GDI.
+Сборку в data/data хотелось бы доработать и под необычные LBA.
+
+
+#20181107
+-оформил мануал. На русском языке - слишком много текста, чтобы переписывать на двух языках.
+
+-вернул в меню формат MDS/MDF, по популярному мнению. Он и раньше был, но был спрятан, чтобы не раздувать меню и запускался, если ввести "mdf". Теперь и образы обзываются правильно (раньше перезаписывались под тем же названием, а теперь корректно даётся таймштамп обоим файлам)
+
+-исправлены ошибки в переводе, особенно режим для образов с аудиотреками. Исправлены сообщения, которые не должны были появлятся.
+Нет изменений в логике работы, но стало опрятнее выглядеть.
+
+-меню подкорректировано на более логичное. Думаю, что нету смысла писать "no CDDA" возле каждого пункта, лишняя информационная нагрузка.
+Кому будет нужно, тот озадачится и заметит, что есть пункт "with CDDA". Раз есть с аудиотреками запись "with CDDA", то логично, что остальные для сборки без CDDA.
+Тем более, что режим для CDDA редко используется.
+К слову говоря, музыку нельзя ложить с "корявыми" именами. Например, если в названиях немецкие умлауты. Пробелы и скобки допустимы. Лучше называть цифрами, вроде 01.mp3 и т.д.
+
+-багфикс в "fast-mode-lazy.cmd", если кто-то вообще им пользуется. Теперь обзывает образы правильно на нерусских виндовз.
+Напомню, что это сильно упрощенный скрипт, который нужно настраивать под какую-нибудь определенную игру. Нужно, если один и тот же образ приходится собирать по 100 раз в день, проверяя изменения в переводе, например. Настройки задаются в конфиге и после этого не нужно ничего вводить.
+Код в этом скрипте более понятный и линейный, не перегружен проверками и "мастером сборки"
+
+-таймер переименовал в секундомер, что более логично. Теперь, после окончания сборки образа пишет, например:
+0
+  0 00:00:20 stopwatch view
+Это значит, что собрало образ за 20 секунд. Первая цифра вверху это количество дней, если вдруг кто-то думает что за она.
+Сильно не мешает, поэтому сойдет пока и так. Вдруг кто будет собирать образ на полурабочем HDD в PIO режиме.. =)
+Время отсчитывается только после запуска создания образа, если лазить по настройкам это не учитывается.
+
+
+#20181106 
+-предустановки теперь на Katana по-умолчанию, бинхак включен.  По популярному мнению
+
+-по просьбам трудящихся добавлен таймер. Пишет в конце скрипта сколько образ собирался. Создание dummy и копания в меню не учитываются, начинает отсчитывать только когда начинается создание образа.
+
+-исправлена ошибка с именами файлов на не-русскоязычных Windows. Образ переименовывало по системному времени.. Но, в каждом регионе свои настройки по-умолчанию, отличающиеся от русского и могла получаться каша.
+
+-добавлен ConEmu. Потому, что мне так удобнее для Win7 (где нельзя из консоли быстро копировать текст и вставлять). Пользоватся не обязательно, но через "Lazyboot_v2.3 loader.cmd" скрипт запустится через "эмулятор консоли" ConEmu. Я не проверял на мониторах с высоким DPI. Возможно, там может выглядеть мелко.
+
+-----------------------------------------------
+изменился формат названий версий
+теперь по Канаде (год-месяц-день,
+так лучше сортировка файлов работает)
+-----------------------------------------------
+
+#04/05/16
+-если в главном меню ввести слово kos, то автоматически включает режим kallistiOS и отключает бинхак. Изменение для главного скрипта
+
+#03/05/16
+-поддержка unscrambled бинарников для хомбрюшных игр kallistiOS.
+Нужно переименовать бинарник в unscrambled.bin и положить в data. Оно сконвертится в 1ST_READ.BIN.
+
+Напомню, что unscrambled бинарники используются только в хомбою и тогда, когда они не главные загрузочные файлы. Их запускает какая-то другая прога или лончер. В общем, многоигровки.
+А для одноигровки нужны scrambled-формата. Узнать формат можно, проверив прогой bincheck-2.0 (есть в архиве). Все это не касается коммерческих игр на официальном SDK.
+
+Работать будет только в основном скрипте, не для упрощенного режима
+
+#02/05/16
+-багфиксы основного скрипта. Лучше называет образы - отсутствовал пробел между датой и временем. Раньше, когда спрашивало ДА или НЕТ и жать просто ENTER, то скрипт закрывался. Теперь, будет считать нажатие ENTER за положительный ответ.
+-В главном меню, если нажать ENTER, то сразу перейдет к первому пункту, создание образа CDI
+
+#21/10/15
+-опции более удобные, исправлены ошибки (если ввести пустое имя образа, было некорректно и т.п.)
+-LBA теперь берется из конфига правильно. Но, 11702 крайне рекомендуется для образов без CDDA
+-подборка дополнительных програм обновлена
+-скрытые возможности. Если ввести на вопрос "What type of selfboot image you need?" слова:
+
+mds, начнется сборка mdf/mds без CDDA-треков
+default, все настройки сбросятся на дефолт
+kos, будут предустановки на Homebrew-игры (выкл. бинхак, другой ip.bin и т.п.)
+katana, не будет определять kos, где это используется
+nologo, отключится лого
+logo, включится лого
+nobinhack, бинарники не будут прохачены
+binhack, включится бинхак и hack4
+options, перейдёт в опции
+
+-----------------------------------------------
+изменился формат названий версий
+теперь по дате (дата/месяц/год)
+номер версии остался для красоты
+-----------------------------------------------
+
+v1.9.9b2
+-оповещение о включенном логотипе возвращено в шапку.
+-переделан скрипт options. Теперь там показывает основные выставленные настройки
+-небольшие улучшения.
+
+v1.9.8
+-исправлен косяк с сортировкой. Теперь ложить нужно sortfile.str. Если другое имя, то нужно указать в settings.ini (вторая строка)
+-добавлено отключение проверки на длинну метки тома (установлено 8 символов, как во всех коммерческих играх на DC и по стандарту ISO9660). 
+Но, если вдруг надо необычное имя тома, то в конфиге можно указать вместо isonamechk_on  -  off. В CDI будут работать и длинные имена, но ради соответствия коммерческим играм - отключено.
+-прочие исправления и улучшения
+
+v.1.9rc3
+-исплавлен баг. Если нету главного загрузочного файла, то в быстром режиме создавался пустой, нерабочий образ. Теперь выдаст предупреждение и создаст из данных обычный ISO.
+
+v.1.9b2
+-поддержка .elf и .sbi (ложить тоже в папку data)
+-исправления и улучшения.
+-новые настройки:
+-IP.BIN создавался уже после того, как про него спрашивало (в режиме SBI). Исправлено  
+
+#fastmode_off (быстрый режим. Отдельный скрипт, отличается от основного и допиливается по другому)
+#alert_on (отключить предупреждение. Оно работает только в основном режиме)
+#MYDEFAULTGAME (название самого файла CDI. Без ограничений в 8 букв)
+#1ST_READ.BIN (название главного бинарника. Иногда будет игнорить этот параметр, если есть эльф и т.п.)
+#objcopy4all_off (конвертит все Эльфы в бинарники. не работает)
+#scramble_on (не используется)
+#binhack_on (Можно выключить бинхак, для КОС. Если выключено и не стоит в настройках Катана, то будет спрашивать "а не хомбрюшка ли это")
+#dataname  (название дата трека. В главном скрипте это так же как название образа. Можно только 8 ВОСЕМЬ букв, больше написать не даст)
+#11702  (ЛБА)
+#cdda_off (не используется. В будущем отключает проверку файлов аудио в папке аудио)
+#kos - (можно писать kos,katana,wince. отключает вопрос в БЫСТРОМ РЕЖИМЕ о том, какая ОС используется, если выключен БИНХАК)
+#namelist_on добавляет к SBI и эльф текстовое описание
+#inducer_on выключает определение SBI 
+#dchakker_off (не используется)
+
+v.1.8rc2
+-появились ОПЦИИ. Туда вынесена настройка логотипа, предупреждающего звука (о готовности образа), настойка имени создаваемого образа.
+-другие исправления и изменения
+-переделан БЫСТРЫЙ РЕЖИМ. Теперь он включается только через опции, никаких папок создавать не нужно.
+-появился конфигурационный файл, который лежит тут: Lazyboot\tools\cfg\settings.ini. Настойки теперь хранятся там. Если его нету, то создаст при первом запуске. Можно настраивать вручную или удалять.
+
+v.1.8b5
+-В fastmode образам к названию ставит нормальный timestamp, вместо %randome%
+
+v.1.8b3
+-БЫСТРЫЙ РЕЖИМ теперь работает по-другому. Он включится, если в папке data создать пустую папку fastmode или ultrafast (разница между ними в скорости вывода сообщений на экран).
+
+Можно так же включать и выключать через файлы fast_mode.cmd и ultrafast_mode.cmd (лежат в Lazyboot\extra_tools\ и запускать прямо оттуда). Запустить один раз - ВКЛ, еще раз - ВЫКЛ
+
+v.1.8b
+-цветовое оформление под стиль CDI4DC
+-исправления в переводе
+-новая фича: БЫСТРЫЙ РЕЖИМ. Если в папке test_data лежат файлы, то образ из них создаёт не задавая никаких вопросов (в полностью автоматическом режиме) и даёт ему уникальное имя. Это полезно тестировать образы. Без CDDA и Dummy. [примечание: фича выпилена, папки test_data не нужно]
+
+
+v.1.7.1
+-добавлен костыль для Sonic Adventure 2. Если игра SA2, то предложит использовать уже пропатченные бинарники. 
+GDI соберает нормально и с родными бинарниками т.к. их в этом формате не нужно патчить, только не с родным IP.BIN. Если нужно, то сгенерировать его и потом изменить под свои нужды.
+
+v.1.7f
+-не включил buildgdi.exe в комплект, из-за чего создание GDI не могло работать в принципе. Заметил и вернул на место.
+
+v.1.7a (final???)
+-добавлен ffmpeg для создания образов с CDDA-треками. Теперь не обязательно подготавливать аудиотреки исключительно в "сыром виде" (RAW). Отныне любой более-менее популярный (и даже непопулярные) форматы будут перекодированы автоматически. Или не перекодированы, если они уже в RAW или SND.  Вопрос о труъ-loseless оставим для кэпов.
+-SND в папке audio теперь автоматически переименовываются в RAW. Goldwave рипает с дисков, в сыром виде, с расширением SND. Поэтому это может пригодится, чтобы не переименовывать вручную
+-исправлена ошибка при отключении логотипа
+-мелкие исправления и улучшения (аудиотреки, вставка лого)
+-Сам скрипт (название) Lazyboot_v1.7a.cmd в корне теперь можно переименовывать как угодно (ничего не отвалится)
+
+v.1.6b
+- Старое название Selfboot script заменено на LazyBoot, чтобы не путать с другими скриптами.
+- Интегрирован GDIbuilder (взят отсюда: http://projects.sappharad.com/tools/gdibuilder.html). CDDA-треки пока не поддерживаются.
+- Добавлено звуковое оповещение о создании образа (не отключаемое, на данный момент)
+- Изменена структура и названия меню, на более логичное
+- Добавлена возможность отключения и выбора логотипа (из готовых)
+- MDF/MDS остался для образов с CDDA-треками, как необходимый. Для обычных образов - отключен.
+- обновлен софт в папке extra_tools на более актуальный
+- Прочие мелкие исправления и улучшения
+
+
+v.1.5.0 
+ поддержка sortfile.str. Через новый GDIExplorer можно генерировать файл сортировки, по умолчанию он создается как sortfile.str. Его нужно положить в корень скрипта и тогда образ соберется с сортировкой.
+Раньше для этого нужно было ложить sort.txt. Обращаю внимание, что если положить sortfile.str и sort.txt одновременно, то файлы будут сортироваться, как указано в sort.txt.
+- прочие мелкие изменения
+- в папку extra_tools положил GDI Explorer и GD-EmuSD. В GDEmu-SD русский перевод исправлен на более корректный, добавлены языки.
+
+
+v.1.4.3
+Вернул создание файла-пустышки и добавил в пункт меню "ничего не патчить, создать образ из того, что есть"
+Он переименовывается в 0.0 и будет невиден в файловой системе.
+
+
+-----------------------------------------------
+
+moving to Russian language..
+-----------------------------------------------
+
+
+v.1.4.0 - etc. too lazy update this change-log.
+
+v.1.3.0
+-replaced old 16bit binhack to 32bit clone by  FamilyGuy
+-update in translation
+-tested and working good on WindowsXP SP3, Windows7 32bit
+
+v1.2.0
+-added auto-creation of dummy file for regular 700Mb CD
+-update in translation
+-replaced logo.mr to standard dc-lab team logo.
+
+ v1.1.0 
+ - English translation 
+ - Simplified in some places
+
+ v. (early versions)
+ -unknown changes
+(Based on Shoometsu SelfBoot batch script
+special thanks to Shoometsu and and the authors of the selfboot tools)

@@ -1,0 +1,34 @@
+-----------------------
+Syntax:
+-----------------------
+
+mkcdi.exe -i .\data -V dcgame -o mygame.cdi -l 45000
+
+If no argument is provided and you run mkcdi.exe, then it will build an image with the name: dcgame.cdi from the .\data folder if it exists in the current directory.
+
+-----------------------
+Additional info:
+-----------------------
+
+LBA 45000 and 11702 are recommended.
+
+This tool does not patch anything. It works like cdi4dc and builds an image from the provided data using mkisoft and Python.
+
+Patch your binaries for the necessary LBA and provide an IP.BIN if needed. For data from GDI images, LBA 45000 is normal; unofficial CDI often used 11702. If you want to use your data with LBA 45000 just like for the GDI Builder, then you need to patch the binaries (1ST_READ.BIN, etc.) with a tool like binpatch.
+
+-----------------------
+System requirements
+-----------------------
+
+The app is supported on the following Windows operating systems:
+
+Windows 7 (with latest updates)
+Windows 10
+Windows 11
+
+The app may also work on Windows XP if you have a proper version of Python installed and use the mkisofs_date.py script instead of the mkcdi.exe executable. However, this configuration is not officially supported.
+
+While the application currently works on the listed Windows versions, there is no guarantee that future updates to these operating systems won't break compatibility. The developer will aim to maintain compatibility, but users should be aware that issues could arise over time as Windows evolves
+
+
+

@@ -1,0 +1,18 @@
+usage: mkcdi.exe [-h] [-i INPUT] [-l LBA] [-V VOLUME_NAME] [-o OUTPUT]
+
+example:
+mkcdi.exe -i .\data -V "zodik" -l 45000
+
+Create CDI image from a data folder. 
+Binhack and hack4 are not applied automatically, so you need to patch binaries for himself and provide a proper IP.BIN, if needed.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        Input directory (default: 'data')
+  -l LBA, --lba LBA     LBA parameter (default: 45000)
+  -V VOLUME_NAME, --volume-name VOLUME_NAME
+                        Volume name for the ISO image (default: 'dcgame')
+  -o OUTPUT, --output OUTPUT
+                        Output CDI file (default:
+                        <volume_name>-<current_datetime>.cdi)

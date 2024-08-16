@@ -1,0 +1,2 @@
+@echo off
+start "" ".\tools\ConEmu\ConEmu.exe" /cmd ".\Lazyboot_v3.5.cmd" &exit
