@@ -48,6 +48,8 @@ System Requirements
 
 Lazyboot version 4 and newer do not support Windows XP. Instead, you will need to use Windows 7 (with the latest updates) or Windows 10. While it may also work on Windows 11 and Wine, this has not been officially tested.
 
+Linux users can try mkcdi.py from "extra_tools" directory (req. Python 3.12 and compatible version of mkisofs)
+
 
 -----------------------------------------------------------
 How to Use
