@@ -2,7 +2,7 @@
 Licensing Information
 --------------------------------------------------
 
-lazyboot.cmd; lazyboot.cpp; options.bat; basher.sh; background_play.cpp; play.cpp; timer.cpp
+lazyboot.cmd; lazyboot.cpp; options.bat; background_play.cpp; play.cpp; timer.cpp
 
 These components are released under the CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.
 
