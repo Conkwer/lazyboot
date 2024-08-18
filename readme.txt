@@ -35,7 +35,7 @@ Features:
 - It can unpack CDI (drag'n'drop CDI to lazyboot.exe)
 - It can build a GDI from data, if you provide an original IP.BIN (not very valid, tho)
 - You can build a media CD with it and encode your video files (like mp4 h264) to supported format.
-- It can build a lot of emulators and create a romlist for it (fast loading)
+- It can build a lot of emulators and create a romlist for it (fast loading) (removed in Github release)
 - CDI, ISO, MDF+MDS, SBI, GDI support
 - Easy to integrate to any other tool or use with a specific game.
 - etc, etc, etc. 
