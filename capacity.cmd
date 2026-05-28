@@ -3,7 +3,7 @@ cd .\tools
 sfk echo [cyan]capacity checker (80min)[def]
 sfk sleep 1700;
 echo.
-du --bytes --summarize ..\data | cut -f1 >datasize.txt
+dirsize.exe ..\data >datasize.txt
 set /p DATASIZE=<datasize.txt
 sfk sleep 300;
 set /a DATASIZE_MB="%DATASIZE%/1024000"

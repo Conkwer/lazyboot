@@ -1,7 +1,7 @@
 @echo off&&cls
 
 :: 20250511
-set LAZYVERSION=v6.0
+set LAZYVERSION=v6.1
 
 :BEGINNING
 
@@ -1111,7 +1111,7 @@ sfk echo [cyan]DUMMY CREATOR[def]
 sfk echo ^(dummy file will be hidden in file system^)
 sfk sleep 1700;
 echo.
-du --bytes --summarize ..\data | cut -f1 >datasize.txt
+dirsize.exe ..\data >datasize.txt
 set /p DATASIZE=<datasize.txt
 sfk sleep 300;
 set /a DATASIZE_MB="%DATASIZE%/1024000"

@@ -1,7 +1,7 @@
 	:PRINT_TITLE
     cls
     @echo off
-    set LAZYVERSION=v5.5
+    set LAZYVERSION=v6.1
     mode con: lines=30
     if exist binhack.exe cd ..
     if not exist tools\binhack.exe echo ERROR^:system files not found in tools^\ folder&echo.&pause
