@@ -1,5 +1,20 @@
 Changelog:
 
+#20260531
+- Removed broken UnxUtils tools (cp.exe, du.exe, cut.exe, ls.exe, win32gnu.dll).
+  These ancient 2003 binaries caused "entry point _commode_dll" errors on Win10/Win11.
+  Replaced with dirsize.exe — a native 32-bit C++ tool for directory size calculation.
+  Source: tools/dirsize.cpp. Compiled with MinGW-w64, statically linked.
+- Experimental: native C++ mkcdi.exe / iso2cdi.exe replacement (cdibuilder).
+  Was 6.9MB Python/PyInstaller bundle, now 280KB statically-linked 32-bit binary.
+  No Python runtime needed. Same CLI, ~3x faster build times (nightly branch only).
+  Source: tools/cdibuilder.cpp. cdibuilder supports both native (-i/-I/-o/-V/-l/-t)
+  and legacy compat modes (<iso> <cdi> -l <lba> | -d) — drop-in for mkcdi/cdi4dc.
+  cdi4dc.exe remains the original tool (with ECC) for mastering-quality images.
+- Added tools/icon.ico and tools/dpiaware.manifest to reduce antivirus false positives
+  on compiled binaries.
+- Bumped version to v6.1.
+
 #20240524
 - a new tool, mkcdi.cmd (it also availible as standalone app: see .\extra_tools\lzlite).
 How it works: it the same as lazyboot.cmd but simpler (less reliable, tho) and do not asking questions. It use python app to buld a cdi as fast as possible. You need to run the app and it will gives you a cdi (~90% of games should works fine).
