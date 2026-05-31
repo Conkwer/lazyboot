@@ -38,7 +38,7 @@ if !c!==17 set "doomer=%%A"
 if !c!==18 set "soundbank=%%A"
 )
 
-:: mkcdi.exe based on Python 3.12.3 and compiled via pyinstaller and do not works on WinXP so cdi4dc will be forced if WinXP will be detected. Should work on Win7 and Win10
+:: mkcdi.exe, cdi4dc.exe, and iso2cdi.exe are now native C++ (cdibuilder). No Python runtime needed. Compatible with Win7-Win11.
 for /f "tokens=2 delims=[]" %%i in ('ver') do set VERSION=%%i
 for /f "tokens=2-3 delims=. " %%i in ("%VERSION%") do set VERSION=%%i.%%j
 
