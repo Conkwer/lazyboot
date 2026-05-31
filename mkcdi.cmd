@@ -3,7 +3,7 @@ rem examples: 45000; 11702
 set lba=45000
 set binary=1ST_READ.BIN
 
-:: mkcdi.exe based on Python 3.12.3 and compiled via pyinstaller and do not works on WinXP
+:: mkcdi.exe now uses native C++ cdibuilder (no Python, Win7-Win11 compatible)
 for /f "tokens=2 delims=[]" %%i in ('ver') do set VERSION=%%i
 for /f "tokens=2-3 delims=. " %%i in ("%VERSION%") do set VERSION=%%i.%%j
 
